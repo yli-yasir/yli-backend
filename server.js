@@ -9,27 +9,21 @@ const octokit = new Octokit({
 
 const app = express();
 
-const repoContentOptions = {
-    owner: 'yli-yasir',
-    repo: 'yli-contents'
-};
-
-app.get('/categories', async (req, res, next) => {
-    const { data } = await octokit.rest.repos.getContent(repoContentOptions);
-    const categories = data.map((category) => category.name);
-    res.json(categories);
-});
-
-app.get('/categories/:name', async (req, res, next) => {
-    const { data } = await octokit.rest.repos.getContent({
-        ...repoContentOptions,
-        path: `/${req.params.name}`
-    });
-    const categoryContents = data.map(({ name, download_url }) => ({
-        name,
-        download_url
-    }));
-    res.json(categoryContents);
+// Normally defined as separate endpoints...
+// Since these will be doing essentially the same thing, they are combined as one.
+app.get('/contents/(:path)?', async (req, res, next) => {
+    try {
+        const { data } = await octokit.rest.repos.getContent({
+            owner: 'yli-yasir',
+            repo: 'yli-contents',
+            path: req.params.path
+        });
+        const contents = data.map(content => content.name);
+        res.json(contents);
+    }
+    catch(e){
+        e.status ? res.sendStatus(e.status) : next(e);
+    }
 });
 
 
