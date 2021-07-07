@@ -1,0 +1,21 @@
+{
+  "name": "yli-backend",
+  "version": "1.0.0",
+  "description": "Simple REST server utilizing github API",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "yli-yasir",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yli-yasir/yli-backend.git"
+  },
+  "dependencies": {
+    "@octokit/rest": "^18.6.7",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1"
+  }
+}
