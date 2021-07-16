@@ -17,12 +17,13 @@ app.use(express.json());
 app.post('/github/graphql', async (req, res, next) => {
   try {
     const githubRes = await githubGraphql(req.body);
-    return res.json(githubRes);
+    return res.json({ data: githubRes });
   }
-  catch (e) {
-    const { errors } = e;
-    errors ? res.json({ errors }) :
-      res.status(e.status || 500).json({ message: e.message });
+  catch (error) {
+    if (error.name === "GraphqlError") {
+      return res.json({ errors: error.errors })
+    }
+    res.status(error.status || 500).json({ message: error.message });
   }
 
 });
