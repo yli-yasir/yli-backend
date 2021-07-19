@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const cors = require('cors');
 let { graphql: githubGraphql } = require("@octokit/graphql");
 
 githubGraphql = githubGraphql.defaults({
@@ -11,9 +12,9 @@ githubGraphql = githubGraphql.defaults({
 const app = express();
 
 app.use(express.json());
+app.use(cors());
 
-// Normally defined as separate endpoints...
-// Since these will be doing essentially the same thing, they are combined as one.
+
 app.post('/github/graphql', async (req, res, next) => {
   try {
     const githubRes = await githubGraphql(req.body);
