@@ -15,14 +15,15 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: process.env.NODE_ENV === 'production' ? process.env.ORIGIN : "*",
-    optionsSuccessStatus: 200, 
+    origin: process.env.NODE_ENV === "production" ? process.env.ORIGIN : "*",
+    optionsSuccessStatus: 200,
   })
 );
 
 app.post("/github/graphql", async (req, res, next) => {
   try {
-    const githubRes = await githubGraphql(req.body);
+    const {query,variables} = req.body;
+    const githubRes = await githubGraphql({query,...variables});
     return res.json({ data: githubRes });
   } catch (error) {
     if (error.name === "GraphqlError") {
